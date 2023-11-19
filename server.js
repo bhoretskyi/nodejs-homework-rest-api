@@ -2,13 +2,13 @@ const app = require("./app");
 const mongoose = require("mongoose");
 // const{DB_HOST} = require('./config')
 const {DB_HOST} = process.env
-// console.log(process.env)
+const {PORT = 3000} = process.env
 mongoose
   .connect(DB_HOST)
   .then(() => {
-    app.listen(3000, () => {
+    app.listen(PORT, () => {
       console.log(
-        "Database connection successful. Server running. Use our API on port: 3000"
+       `Database connection successful. Server running. Use our API on port: ${PORT}`
       );
     });
   })
