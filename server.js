@@ -7,7 +7,7 @@ mongoose
   .then(() => {
     app.listen(PORT, () => {
       console.log(
-       `Database connection successful. Server running. Use our API on port: ${PORT}`
+       `Database connection successful.`
       );
     });
   })
