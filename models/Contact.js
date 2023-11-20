@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const { handleSaveError } = require(".//hooks.js");
+const { handleSaveError, preUpdate } = require(".//hooks.js");
 const Joi = require("joi");
 
 const contactSchema = new Schema(
@@ -22,6 +22,8 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 contactSchema.post("save", handleSaveError);
+contactSchema.post("findOneAndUpdate", handleSaveError);
+contactSchema.pre("findOneAndUpdate", preUpdate );
 const Contact = model("contact", contactSchema);
 
 const contactAddSchema = Joi.object({
@@ -36,8 +38,21 @@ const contactAddSchema = Joi.object({
     .messages({ "any.required": "missing required phone field" }),
   favorite: Joi.boolean().optional(),
 });
+const contactUpdateSchema = Joi.object({
+  name: Joi.string(),
+
+  email: Joi.string(),
+
+  phone: Joi.string(),
+});
+
+const contactFavoriteSchema = Joi.object({
+  favorite : Joi.boolean().required()
+})
 
 module.exports = {
   Contact,
   contactAddSchema,
+  contactUpdateSchema,
+  contactFavoriteSchema
 };
