@@ -7,12 +7,12 @@ const {
 const { HttpError } = require("../helpers/HttpError.js");
 
 const getAllContacts = async (req, res, next) => {
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 10, favorite } = req.query;
   const { _id: owner } = req.user;
   const skip = (page-1) * limit
 
   try {
-    const contacts = await Contact.find({ owner }, "-createdAt -updatedAt", {skip, limit});
+    const contacts = await Contact.find({ owner, favorite }, "-createdAt -updatedAt", {skip, limit});
     if (!contacts) {
       throw HttpError(404, "Not Found");
     }
