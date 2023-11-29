@@ -11,8 +11,11 @@ const {
   updateContact,
   updateFavoriteContact,
 } = require("../../controllers/contacts-controller.js");
+const { authenticate } = require("../../middlewares/authenticate.js");
 
 const router = express.Router();
+
+router.use(authenticate)
 router.get("/", getAllContacts);
 
 router.get("/:contactId", isValidId, getContactByID);
