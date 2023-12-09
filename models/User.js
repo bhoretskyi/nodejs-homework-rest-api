@@ -38,6 +38,9 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    avatarURL: {
+      type: String
+    }
   },
 
   { versionKey: false, timestamps: true }
@@ -46,9 +49,10 @@ const userSchema = new Schema(
 userSchema.post("save", handleSaveError);
 userSchema.post("findOneAndUpdate", handleSaveError);
 userSchema.pre("findOneAndUpdate", preUpdate);
+
 const User = model("user", userSchema);
 
-const userSignUpSchema = Joi.object({
+const userSignUpSchema = Joi.object({ 
   // username: Joi.string()
   //   .required()
   //   .messages({ "any.required": "missing required username field" }),

@@ -54,8 +54,8 @@ const addContact = async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-const avatarURL = path.join( 'avatars', filename)
-    const result = await Contact.create({ ...req.body, owner, avatarURL });
+// const avatarURL = path.join( 'avatars', filename)
+    const result = await Contact.create({ ...req.body, owner });
     res.status(201).json(result);
   } catch (error) {
     next(error);

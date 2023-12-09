@@ -2,6 +2,7 @@ const { User } = require("../models/User.js");
 const bycrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
 const {JWT_SECRET} = process.env
+const gravatar = require('gravatar');
 
 const { HttpError } = require("../helpers/HttpError.js");
 
@@ -13,7 +14,8 @@ const signup = async (req, res, next) => {
       throw HttpError(409, "Email in use");
     }
     const hashPassword = await bycrypt.hash(password, 10);
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const avatarURL = gravatar.url(email)
+    const newUser = await User.create({ ...req.body, password: hashPassword,avatarURL });
     res.status(201).json({
        user: {
         email: newUser.email,
