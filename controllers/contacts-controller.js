@@ -5,14 +5,20 @@ const {
   contactFavoriteSchema,
 } = require("../models/Contact.js");
 const { HttpError } = require("../helpers/HttpError.js");
+const fs = require("fs/promises");
+const path = require("path");
+const avatarsPath = path.resolve("public", "avatars");
 
 const getAllContacts = async (req, res, next) => {
-  const { page = 1, limit = 10, favorite } = req.query;
+  const { page = 1, limit = 10 } = req.query;
   const { _id: owner } = req.user;
-  const skip = (page-1) * limit
+  const skip = (page - 1) * limit;
 
   try {
-    const contacts = await Contact.find({ owner, favorite }, "-createdAt -updatedAt", {skip, limit});
+    const contacts = await Contact.find({ owner }, "-createdAt -updatedAt", {
+      skip,
+      limit,
+    });
     if (!contacts) {
       throw HttpError(404, "Not Found");
     }
@@ -39,13 +45,17 @@ const getContactByID = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   const { _id: owner } = req.user;
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarsPath, filename);
+
+  await fs.rename(oldPath, newPath);
   try {
     const { error } = contactAddSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
-
-    const result = await Contact.create({ ...req.body, owner });
+const avatarURL = path.join( 'avatars', filename)
+    const result = await Contact.create({ ...req.body, owner, avatarURL });
     res.status(201).json(result);
   } catch (error) {
     next(error);
