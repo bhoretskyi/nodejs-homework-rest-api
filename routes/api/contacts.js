@@ -12,7 +12,7 @@ const {
   updateFavoriteContact,
 } = require("../../controllers/contacts-controller.js");
 const { authenticate } = require("../../middlewares/authenticate.js");
-const {upload}  = require('../../middlewares/upload.js')
+// const {upload}  = require('../../middlewares/upload.js')
 
 const router = express.Router();
 
@@ -21,7 +21,7 @@ router.get("/", getAllContacts);
 
 router.get("/:contactId", isValidId, getContactByID);
 
-router.post("/", upload.single('avatar'), isEmptyBody, addContact);
+router.post("/", isEmptyBody, addContact);
 
 router.delete("/:contactId", deleteContact);
 

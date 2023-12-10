@@ -6,8 +6,8 @@ const {
 } = require("../models/Contact.js");
 const { HttpError } = require("../helpers/HttpError.js");
 const fs = require("fs/promises");
-const path = require("path");
-const avatarsPath = path.resolve("public", "avatars");
+// const path = require("path");
+// const avatarsPath = path.resolve("public", "avatars");
 
 const getAllContacts = async (req, res, next) => {
   const { page = 1, limit = 10 } = req.query;
