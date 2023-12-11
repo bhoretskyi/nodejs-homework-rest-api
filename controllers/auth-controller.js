@@ -72,19 +72,36 @@ const logout = async (req, res) => {
   await User.findByIdAndUpdate(_id, { token: "" });
   res.status(204).end();
 };
-const updateAvatar = async (req, res) => {
+const updateAvatar = async (req, res, next) => {
+  
+
+  if (!req.file) {
+    return res.status(400).json({ error: 'Please load avatar' });
+  }
+  if (!req.user) {
+    return res.status(401).json({message: "Not authorized"})
+    
+  }
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
-  const filename = `${_id}_${originalname}`;
-  const resultUpload = path.join(avatarsDir, filename);
-  const avatar = await Jimp.read(tempUpload);
-  await avatar.resize(250, 250);
-  await avatar.writeAsync(resultUpload);
-  const avatarURL = path.join("avatars", filename);
-  await User.findByIdAndUpdate(_id, { avatarURL });
-  // await fs.rename(tempUpload, resultUpload);
-  await fs.unlink(tempUpload);
-  res.json({ avatarURL });
+ const filename = `${_id}_${originalname}`;
+ const resultUpload = path.join(avatarsDir, filename);
+
+
+ try { 
+ const avatar = await Jimp.read(tempUpload);
+ await avatar.resize(250, 250);
+ await avatar.writeAsync(resultUpload);
+ const avatarURL = path.join("avatars", filename);
+ await User.findByIdAndUpdate(_id, { avatarURL });
+ // await fs.rename(tempUpload, resultUpload);
+ await fs.unlink(tempUpload);
+ res.json({ avatarURL });
+  
+ } catch (error) {
+  next(error)
+  
+ }
 };
 
 module.exports = {
