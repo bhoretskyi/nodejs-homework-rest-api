@@ -72,6 +72,9 @@ const userEmailSchema = Joi.object({
   .required()
   .pattern(emailRegexp)
   .messages({ "any.required": "missing required email field" }),
+  verificationCode: Joi.string()
+  
+  
 })
 
 module.exports = {

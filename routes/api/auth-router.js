@@ -22,7 +22,7 @@ authRouter.post(
   validateBody(userSignUpSchema),
   signup
 );
-authRouter.get("/verify/:verificationCode", verify)
+authRouter.get("/verify/:verificationToken", verify)
 authRouter.post('/verify', isEmptyBody, validateBody(userEmailSchema), recendVerify)
 authRouter.post("/login", isEmptyBody, validateBody(userSignInSchema), signin);
 authRouter.get("/current", authenticate, getCurrent);

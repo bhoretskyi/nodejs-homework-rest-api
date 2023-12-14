@@ -50,13 +50,14 @@ const signup = async (req, res, next) => {
 const verify = async (req, res, next) => {
   try {
     const { verificationCode } = req.params;
+    console.log(req.params)
     const user = await User.findOne({ verificationCode });
     if (!user) {
       throw HttpError(404, "User not found");
     }
     await User.findByIdAndUpdate(user._id, {
       verify: true,
-      verificationCode: "",
+      verificationCode: verificationCode,
     });
     res.json({
       message: "Verification successful",
