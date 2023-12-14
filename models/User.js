@@ -5,21 +5,6 @@ const emailRegexp = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
 const Joi = require("joi");
 const userSchema = new Schema(
   {
-    // username: {
-    //   type: String,
-    //   required: true,
-    // },
-    // email: {
-    //   type: String,
-    //   match: emailRegexp,
-    //   unique: true,
-    //   required: true,
-    // },
-    // password: {
-    //   type: String,
-    //   minLength: 6,
-    //   required: true,
-
     password: {
       type: String,
       required: [true, "Password is required"],
@@ -39,6 +24,13 @@ const userSchema = new Schema(
       default: null,
     },
     avatarURL: {
+      type: String,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationCode: {
       type: String
     }
   },
@@ -52,7 +44,7 @@ userSchema.pre("findOneAndUpdate", preUpdate);
 
 const User = model("user", userSchema);
 
-const userSignUpSchema = Joi.object({ 
+const userSignUpSchema = Joi.object({
   // username: Joi.string()
   //   .required()
   //   .messages({ "any.required": "missing required username field" }),
@@ -74,9 +66,16 @@ const userSignInSchema = Joi.object({
     .required()
     .messages({ "any.required": "missing required password field" }),
 });
+const userEmailSchema = Joi.object({
+  email: Joi.string()
+  .required()
+  .pattern(emailRegexp)
+  .messages({ "any.required": "missing required email field" }),
+})
 
 module.exports = {
   User,
   userSignUpSchema,
   userSignInSchema,
+  userEmailSchema
 };

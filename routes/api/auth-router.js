@@ -5,9 +5,11 @@ const {
   getCurrent,
   logout,
   updateAvatar,
+  verify,
+  recendVerify,
 } = require("../../controllers/auth-controller.js");
 const { isEmptyBody } = require("../../middlewares/isEmptyBody.js");
-const { userSignUpSchema, userSignInSchema } = require("../../models/User.js");
+const { userSignUpSchema, userSignInSchema, userEmailSchema } = require("../../models/User.js");
 const { validateBody } = require("../../decorators/validateBody.js");
 const { authenticate } = require("../../middlewares/authenticate.js");
 const { upload } = require("../../middlewares/upload.js");
@@ -20,6 +22,8 @@ authRouter.post(
   validateBody(userSignUpSchema),
   signup
 );
+authRouter.get("/verify/:verificationCode", verify)
+authRouter.post('/verify', isEmptyBody, validateBody(userEmailSchema), recendVerify)
 authRouter.post("/login", isEmptyBody, validateBody(userSignInSchema), signin);
 authRouter.get("/current", authenticate, getCurrent);
 authRouter.post("/logout", authenticate, logout);
