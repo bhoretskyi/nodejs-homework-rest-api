@@ -30,9 +30,9 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    verificationCode: {
+    verificationToken: {
       type: String,
-      required: [true, 'Verify token is required'],
+      // required: [true, 'Verify token is required'],
     }
   },
 
@@ -72,7 +72,9 @@ const userEmailSchema = Joi.object({
   .required()
   .pattern(emailRegexp)
   .messages({ "any.required": "missing required email field" }),
-  verificationCode: Joi.string()
+  verificationToken: Joi.string()
+  .required() 
+    .messages({ "any.required": "missing required verification code field" })
   
   
 })
